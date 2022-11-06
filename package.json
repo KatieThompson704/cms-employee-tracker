@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/KatieThompson704/cms-employee-tracker#readme",
   "dependencies": {
+    "console.table": "^0.10.0",
     "inquirer": "^8.2.5",
     "jest": "^29.2.2"
   }
