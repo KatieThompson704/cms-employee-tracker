@@ -107,6 +107,17 @@ async function addEmployee() {
     ])
     .then((response) => {
       console.log(response);
+      db.promise()
+        .query("INSERT INTO employee SET ?", {
+          first_name: response.firstName,
+          last_name: response.firstName,
+          role: response.role,
+          manager: response.managerID,
+        })
+        .then(() => {
+          viewEmployee();
+        });
+      init();
     });
 }
 
@@ -124,7 +135,32 @@ function viewRole() {
     });
 }
 
-// function addRole()
+function addRole() {
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "roleTitle",
+        message: "What is the name of the new role",
+      },
+      {
+        type: "input",
+        message: "What is the salaray of this new role?",
+        name: "salary",
+      },
+    ])
+    .then((response) => {
+      db.promise()
+        .query("INSERT INTO role SET ?", {
+          title: response.roleTitle,
+          salary: response.salary,
+        })
+        .then(() => {
+          viewRole();
+        });
+      init();
+    });
+}
 
 function viewDepartment() {
   db.promise()
@@ -136,6 +172,27 @@ function viewDepartment() {
     });
 }
 
-// function addDepartment()
+function addDepartment() {
+  inquirer
+    .prompt({
+      type: "input",
+      name: "name",
+      message: "What is the name of the new department",
+    })
+    .then((response) => {
+      db.promise()
+        .query("INSERT INTO department SET ?", {
+          department_name: response.name,
+        })
+        .then(([response]) => {
+          if (response.affectedRows > 0) {
+            viewDepartment();
+          } else {
+            console.log("Department not created; Error entry");
+            init();
+          }
+        });
+    });
+}
 
 init();
