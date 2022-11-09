@@ -117,7 +117,6 @@ async function addEmployee() {
         .then(() => {
           viewEmployee();
         });
-      init();
     });
 }
 
@@ -171,7 +170,6 @@ async function addRole() {
         .then(() => {
           viewRole();
         });
-      init();
     });
 }
 
