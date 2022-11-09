@@ -89,7 +89,7 @@ async function addEmployee() {
       },
       {
         type: "input",
-        message: "What is the employee's lastname?",
+        message: "What is the employee's last name?",
         name: "lastName",
       },
       {
@@ -110,9 +110,9 @@ async function addEmployee() {
       db.promise()
         .query("INSERT INTO employee SET ?", {
           first_name: response.firstName,
-          last_name: response.firstName,
-          role: response.role,
-          manager: response.managerID,
+          last_name: response.lastName,
+          role_id: response.role,
+          manager_id: response.managerID,
         })
         .then(() => {
           viewEmployee();
@@ -135,18 +135,30 @@ function viewRole() {
     });
 }
 
-function addRole() {
+async function addRole() {
+  const [departments] = await db.promise().query("SELECT * FROM department");
+  //   from inquirer, name shows on the page and value is our response
+  const deptArray = departments.map((dept) => ({
+    name: dept.department_name,
+    value: dept.id,
+  }));
   inquirer
     .prompt([
       {
         type: "input",
         name: "roleTitle",
-        message: "What is the name of the new role",
+        message: "What is the name of the new role?",
       },
       {
         type: "input",
-        message: "What is the salaray of this new role?",
+        message: "What is the salary of this new role?",
         name: "salary",
+      },
+      {
+        type: "list",
+        message: "What department is the new role within?",
+        choices: deptArray,
+        name: "department",
       },
     ])
     .then((response) => {
@@ -154,6 +166,7 @@ function addRole() {
         .query("INSERT INTO role SET ?", {
           title: response.roleTitle,
           salary: response.salary,
+          department_id: response.department,
         })
         .then(() => {
           viewRole();
